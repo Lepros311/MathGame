@@ -8,7 +8,7 @@ int product;
 int quotient;
 
 string? userGameChoice;
-string[] gameOptions = { "1", "2", "3", "4", "5", "6", "7" };
+string[] gameOptions = { "1", "2", "3", "4", "5" };
 string gameHistory = "";
 int points = 0;
 
@@ -18,25 +18,19 @@ string[] gameStats = { };
 Stopwatch timer = new Stopwatch();
 string time;
 
-
-// Try to implement levels of difficulty.
-
-// Add a timer to track how long the user takes to finish the game.
-
-// Add a function that let's the user pick the number of questions.
-
-// Create a 'Random Game' option where the players will be presented with questions from random operations
-
 string? userDifficultyChoice;
 string[] difficultyOptions = { "1", "2", "3" };
 
 Console.WriteLine("\nWelcome to the Math Game!");
 
-bool playAgain = false;
+bool playAgain;
 
 do
 {
-
+    points = 0;
+    gameHistory = "";
+    timer.Reset();
+    playAgain = false;
     do
     {
         Console.WriteLine("\n1) Low 2) Medium 3) High");
@@ -72,24 +66,21 @@ do
     do
     {
         Console.WriteLine("\n-------------------------------------");
-        Console.WriteLine("1) Addition 2) Subtraction 3) Multiplication 4) Division 5) Random! (+, -, *, and /) 6) View Game History 7) End game");
-        Console.WriteLine("Make a selection. Enter 1, 2, 3, 4, 5, 6, or 7:");
+        Console.WriteLine("1) Addition 2) Subtraction 3) Multiplication 4) Division 5) Random! (+, -, *, and /)");
+        Console.WriteLine("Make a selection. Enter 1, 2, 3, 4, or 5:");
         userGameChoice = Console.ReadLine();
         if (!gameOptions.Contains(userGameChoice))
         {
-            Console.WriteLine("That is not a valid option. You must enter 1, 2, 3, 4, 5, 6, or 7.");
+            Console.WriteLine("That is not a valid option. You must enter 1, 2, 3, 4, or 5.");
         }
     } while (!gameOptions.Contains(userGameChoice));
 
-    if (userGameChoice != "6" && userGameChoice != "7")
-    {
-        timer.Start();
-        Console.WriteLine("Timer started...");
-    }
+    timer.Start();
+    Console.WriteLine("Timer started...");
 
     int questionsAsked = 0;
 
-    while (userGameChoice != "7" && questionsAsked < userMaxQuestionsInt)
+    while (questionsAsked < userMaxQuestionsInt)
     {
         Random random = new Random();
         int num1 = 0;
@@ -113,68 +104,85 @@ do
 
         Console.WriteLine($"\nQuestion #{questionsAsked + 1} out of {userMaxQuestionsInt}:");
 
-        do
+        switch (userGameChoice)
         {
-            switch (userGameChoice)
-            {
-                case "1":
-                    Console.WriteLine($"What is {num1} + {num2}?");
-                    break;
+            case "1":
+                Console.WriteLine($"What is {num1} + {num2}?");
+                break;
 
-                case "2":
-                    Console.WriteLine($"What is {num1} - {num2}?");
-                    break;
+            case "2":
+                Console.WriteLine($"What is {num1} - {num2}?");
+                break;
 
-                case "3":
-                    Console.WriteLine($"What is {num1} x {num2}?");
-                    break;
+            case "3":
+                Console.WriteLine($"What is {num1} x {num2}?");
+                break;
 
-                case "4":
-                    while (num1 % num2 != 0)
+            case "4":
+                while (num1 % num2 != 0)
+                {
+                    if (userDifficultyChoice == "1")
                     {
-                        if (userDifficultyChoice == "1")
-                        {
-                            num1 = random.Next(11);
-                            num2 = random.Next(1, 11);
-                        }
-                        else if (userDifficultyChoice == "2")
-                        {
-                            num1 = random.Next(101);
-                            num2 = random.Next(1, 101);
-                        }
-                        else if (userDifficultyChoice == "3")
-                        {
-                            num1 = random.Next(1001);
-                            num2 = random.Next(1, 1001);
-                        }
+                        num1 = random.Next(11);
+                        num2 = random.Next(1, 11);
                     }
-                    Console.WriteLine($"What is {num1} / {num2}?");
-                    break;
+                    else if (userDifficultyChoice == "2")
+                    {
+                        num1 = random.Next(101);
+                        num2 = random.Next(1, 101);
+                    }
+                    else if (userDifficultyChoice == "3")
+                    {
+                        num1 = random.Next(1001);
+                        num2 = random.Next(1, 1001);
+                    }
+                }
+                Console.WriteLine($"What is {num1} / {num2}?");
+                break;
 
-                case "5":
-                    Random random2 = new Random();
-                    userGameChoice = random2.Next(1, 5).ToString();
-                    continue;
+            case "5":
+                Random random2 = new Random();
+                userGameChoice = random2.Next(1, 5).ToString();
 
-                case "6":
-                    Console.WriteLine("\nYour Game History:");
-                    Console.WriteLine(gameHistory);
-                    time = timer.Elapsed.ToString("mm\\:ss\\.ff");
-                    Console.WriteLine($"Time: {time}");
-                    Console.WriteLine($"Total Points: {points}");
-                    break;
+                switch (userGameChoice)
+                {
+                    case "1":
+                        Console.WriteLine($"What is {num1} + {num2}?");
+                        break;
 
-                case "7":
-                    timer.Stop();
-                    Console.WriteLine("\nPost-Game Report:");
-                    Console.WriteLine(gameHistory);
-                    Console.WriteLine($"Total Points: {points}");
-                    time = timer.Elapsed.ToString("mm\\:ss\\.ff");
-                    Console.WriteLine($"Time: {time}");
-                    Console.WriteLine("\nThanks for playing! Goodbye!");
-                    break;
-            }
-        } while (userGameChoice == "5");
+                    case "2":
+                        Console.WriteLine($"What is {num1} - {num2}?");
+                        break;
+
+                    case "3":
+                        Console.WriteLine($"What is {num1} x {num2}?");
+                        break;
+
+                    case "4":
+                        while (num1 % num2 != 0)
+                        {
+                            if (userDifficultyChoice == "1")
+                            {
+                                num1 = random.Next(11);
+                                num2 = random.Next(1, 11);
+                            }
+                            else if (userDifficultyChoice == "2")
+                            {
+                                num1 = random.Next(101);
+                                num2 = random.Next(1, 101);
+                            }
+                            else if (userDifficultyChoice == "3")
+                            {
+                                num1 = random.Next(1001);
+                                num2 = random.Next(1, 1001);
+                            }
+                        }
+                        Console.WriteLine($"What is {num1} / {num2}?");
+                        break;
+                }
+                break;
+        }
+
 
         string? userAnswerStr;
         int userAnswerInt = 0;
@@ -266,64 +274,45 @@ do
             Console.WriteLine(gameHistory);
             Console.WriteLine($"Total Points: {points}");
             time = timer.Elapsed.ToString("mm\\:ss\\.ff");
-            Console.WriteLine($"Time: {time}");
+            Console.WriteLine($"Time: {time}\n");
         }
     }
 
-    gameNumber++;
+    gameNumber += 1;
     time = timer.Elapsed.ToString("mm\\:ss\\.ff");
 
     string[] singleGameStats = { $"Game {gameNumber}", $"Difficulty Level: {userDifficultyChoice}", $"Questions: {questionsAsked}", $"Total Points: {points}", $"Time: {time}" };
     gameStats = gameStats.Concat(singleGameStats).ToArray();
 
     string? userPlayAgainChoice;
-    string[] playAgainOptions = { "yes", "y", "no", "n" };
+    string[] playAgainOptions = { "1", "2", "3" };
 
     do
     {
-
-        Console.WriteLine("\nDo you want to play again? (y/n):");
+        Console.WriteLine("-------------------------------------");
+        Console.WriteLine("1) Play Again 2) View Game History 3) Quit");
+        Console.WriteLine("Make a selection. Enter 1, 2, or 3:");
         userPlayAgainChoice = Console.ReadLine();
-        if (userPlayAgainChoice != null)
+        if (!playAgainOptions.Contains(userPlayAgainChoice))
         {
-            userPlayAgainChoice = userPlayAgainChoice.ToLower();
-            if (!playAgainOptions.Contains(userPlayAgainChoice))
+            Console.WriteLine("That is not a valid option. You must enter 1, 2, or 3.");
+        }
+        else if (userPlayAgainChoice == "1")
+        {
+            playAgain = true;
+        }
+        else if (userPlayAgainChoice == "2")
+        {
+            Console.WriteLine("\nYour Game History\n------------------");
+            for (int i = 0; i < gameStats.Length; i += 5)
             {
-                Console.WriteLine("That is not a valid answer.");
-            }
-            else if (userPlayAgainChoice == "yes" || userPlayAgainChoice == "y")
-            {
-                playAgain = true;
-            }
-            else
-            {
-                timer.Stop();
-                Console.WriteLine("\nPost-Game Report:");
-                Console.WriteLine(gameHistory);
-                Console.WriteLine($"Total Points: {points}");
-                time = timer.Elapsed.ToString("mm\\:ss\\.ff");
-                Console.WriteLine($"Time: {time}");
-                Console.WriteLine("\nThanks for playing! Goodbye!");
-                Console.WriteLine("\nSummary of Games Played\n------------------\n");
-                for (int i = 0; i < gameStats.Length; i++)
-                {
-                    for (int j = 0; j < gameStats[i].Length; j++)
-                    {
-                        Console.WriteLine($"{gameStats[i][0]}\n{gameStats[i][1]}\n{gameStats[i][2]}\n{gameStats[i][3]}\n{gameStats[i][4]}");
-                    }
-                }
+                Console.WriteLine($"{gameStats[i + 0]}\n{gameStats[i + 1]}\n{gameStats[i + 2]}\n{gameStats[i + 3]}\n{gameStats[i + 4]}\n");
             }
         }
-    } while (!playAgainOptions.Contains(userPlayAgainChoice));
+        else
+        {
+            Console.WriteLine("Thanks for playing! Goodbye!");
+        }
+    } while (!playAgainOptions.Contains(userPlayAgainChoice) || userPlayAgainChoice == "2");
 
 } while (playAgain == true);
-
-// You need to create a Math game containing the 4 basic operations
-
-// The divisions should result on INTEGERS ONLY and dividends should go from 0 to 100. Example: Your app shouldn't present the division 7/2 to the user, since it doesn't result in an integer.
-
-// Users should be presented with a menu to choose an operation
-
-// You should record previous games in a List and there should be an option in the menu for the user to visualize a history of previous games.
-
-// You don't need to record results on a database. Once the program is closed the results will be deleted.
