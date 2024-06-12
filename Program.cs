@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Diagnostics;
 
 int sum;
 int difference;
@@ -27,6 +25,9 @@ bool playAgain;
 
 do
 {
+    string[] operators = { "+", "-", "*", "/", };
+    int operatorsIndex;
+    string randomOperator;
     points = 0;
     gameHistory = "";
     timer.Reset();
@@ -86,6 +87,10 @@ do
         int num1 = 0;
         int num2 = 0;
 
+        Random random2 = new Random();
+        operatorsIndex = random2.Next(0, 4);
+        randomOperator = operators[operatorsIndex];
+
         if (userDifficultyChoice == "1")
         {
             num1 = random.Next(11);
@@ -141,71 +146,46 @@ do
                 break;
 
             case "5":
-                Random random2 = new Random();
-                userGameChoice = random2.Next(1, 5).ToString();
-
-                switch (userGameChoice)
+                while ((randomOperator == "/") && (num1 % num2 != 0))
                 {
-                    case "1":
-                        Console.WriteLine($"What is {num1} + {num2}?");
-                        break;
-
-                    case "2":
-                        Console.WriteLine($"What is {num1} - {num2}?");
-                        break;
-
-                    case "3":
-                        Console.WriteLine($"What is {num1} x {num2}?");
-                        break;
-
-                    case "4":
-                        while (num1 % num2 != 0)
-                        {
-                            if (userDifficultyChoice == "1")
-                            {
-                                num1 = random.Next(11);
-                                num2 = random.Next(1, 11);
-                            }
-                            else if (userDifficultyChoice == "2")
-                            {
-                                num1 = random.Next(101);
-                                num2 = random.Next(1, 101);
-                            }
-                            else if (userDifficultyChoice == "3")
-                            {
-                                num1 = random.Next(1001);
-                                num2 = random.Next(1, 1001);
-                            }
-                        }
-                        Console.WriteLine($"What is {num1} / {num2}?");
-                        break;
+                    if (userDifficultyChoice == "1")
+                    {
+                        num1 = random.Next(11);
+                        num2 = random.Next(1, 11);
+                    }
+                    else if (userDifficultyChoice == "2")
+                    {
+                        num1 = random.Next(101);
+                        num2 = random.Next(1, 101);
+                    }
+                    else if (userDifficultyChoice == "3")
+                    {
+                        num1 = random.Next(1001);
+                        num2 = random.Next(1, 1001);
+                    }
                 }
+                Console.WriteLine($"What is {num1} {randomOperator} {num2}?");
                 break;
         }
-
 
         string? userAnswerStr;
         int userAnswerInt = 0;
         bool validUserAnswer = false;
 
-        if (userGameChoice != "6" && userGameChoice != "7")
+        do
         {
-            do
+            userAnswerStr = Console.ReadLine();
+            if (userAnswerStr != null)
             {
-                userAnswerStr = Console.ReadLine();
-                if (userAnswerStr != null)
+                validUserAnswer = int.TryParse(userAnswerStr, out userAnswerInt);
+                if (!validUserAnswer)
                 {
-                    validUserAnswer = int.TryParse(userAnswerStr, out userAnswerInt);
-                    if (!validUserAnswer)
-                    {
-                        Console.WriteLine("Invalid entry. Enter an integer.");
-                    }
+                    Console.WriteLine("Invalid entry. Enter an integer.");
                 }
-            } while (validUserAnswer == false);
-        }
+            }
+        } while (validUserAnswer == false);
 
-
-        if (userGameChoice == "1")
+        if (userGameChoice == "1" || randomOperator == "+")
         {
             sum = num1 + num2;
             if (sum == userAnswerInt)
@@ -220,7 +200,7 @@ do
                 gameHistory += $"{num1} + {num2} = {sum}...Answered incorrectly\n";
             }
         }
-        else if (userGameChoice == "2")
+        else if (userGameChoice == "2" || randomOperator == "-")
         {
             difference = num1 - num2;
             if (difference == userAnswerInt)
@@ -235,7 +215,7 @@ do
                 gameHistory += $"{num1} - {num2} = {difference}...Answered incorrectly\n";
             }
         }
-        else if (userGameChoice == "3")
+        else if (userGameChoice == "3" || randomOperator == "*")
         {
             product = num1 * num2;
             if (product == userAnswerInt)
@@ -250,7 +230,7 @@ do
                 gameHistory += $"{num1} * {num2} = {product}...Answered incorrectly\n";
             }
         }
-        else if (userGameChoice == "4")
+        else if (userGameChoice == "4" || randomOperator == "/")
         {
             quotient = num1 / num2;
             if (quotient == userAnswerInt)
