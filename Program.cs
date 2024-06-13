@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// The Math Game
+
+using System.Diagnostics;
 
 int sum;
 int difference;
